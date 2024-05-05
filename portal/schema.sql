@@ -11,8 +11,8 @@ CREATE TABLE user (
   password TEXT NOT NULL
 );
 
-    INSERT INTO user (username, password)
-    VALUES ('admin', 'admin');
+    -- INSERT INTO user (username, password)
+    -- VALUES ('admin', 'admin');
 
 
 CREATE TABLE job_type (
