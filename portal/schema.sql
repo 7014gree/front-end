@@ -1,17 +1,17 @@
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS job_type;
 DROP TABLE IF EXISTS job_name;
 DROP TABLE IF EXISTS job_status;
 DROP TABLE IF EXISTS job_details;
 
 
-CREATE TABLE users (
+CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
 );
 
-    INSERT INTO users (username, password)
+    INSERT INTO user (username, password)
     VALUES ('admin', 'admin');
 
 
