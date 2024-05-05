@@ -1,0 +1,6 @@
+# run app
+flask --app portal run --debug
+
+# init db
+flask --app portal init-db
+
