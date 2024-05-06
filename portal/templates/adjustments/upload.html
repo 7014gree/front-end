@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Upload Manual Adjustment{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<form method="post">
+  <fieldset>
+    <legend><h3>Accounting Period</h3></legend>
+    <select id="period" name="period" required>
+      <option value=""></option>
+      {% for period in open_periods %}
+      <option value="{{ period['accounting_period'] }}">{{ period['accounting_period'] }}</option>
+      {% endfor %}
+    </select>
+  </fieldset>
+
+  <fieldset>
+    <legend><h3>Gross or Ceded</h3></legend>
+    <div class="radio-container">
+      <div> 
+        <input type="radio" id="radio-option" name="is-gross" value="1" required>Gross
+      </div>
+      <div>
+        <input type="radio" id="radio-option" name="is-gross" value="0" required>Ceded
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><h3>Adjustment Type</h3></legend>
+    <div class="radio-container">
+      <div>
+        <input type="radio" id="radio-option" name="adj-type" value="REV" required>Reversing
+      </div>
+      <div>
+        <input type="radio" id="radio-option" name="adj-type" value="PERM" required>Permanent
+      </div>
+      <div>
+        <input type="radio" id="radio-option" name="adj-type" value="QTR" required>Quarterly Reversing
+      </div>
+    </div>
+  </fieldset>
+    
+
+  <fieldset>
+    <legend><h3>Post Adjustment to Ledger?</h3></legend>
+    <div class="radio-container" required>
+      <div>
+        <input type="radio" id="radio-option" name="post-to-ledger" value="1" required>Yes
+      </div>
+      <div>
+        <input type="radio" id="radio-option" name="post-to-ledger" value="0" required>No
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><h3>Filepaths</h3></legend>
+      Ensure the filepaths are saved to a network location.<br><br>
+      <b>Adjustment file: (.xlsx only)</b><input type="text" id="text-input" name="upload-path" required><br>
+      <b>Attachment file: (any file type, defaults to adjustment file)</b><input type="text" id="text-input" name="attachment-path">
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><h3>E-mail Notification</h3></legend>
+      E-mail addresses separated by semicolons or new lines:<br><br>
+      <textarea id="text-input" rows="4"name="notify-email"></textarea><br>
+    </div>
+  </fieldset>
+  
+  <h1></h1>
+  <input type="submit" value="Submit">
+
+
+</form>
+{% endblock %}

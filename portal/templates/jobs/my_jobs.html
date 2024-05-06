@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}My Tasks ({{ g.user['username'] }}){% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <br>
+  <h3>In Progress</h3>
+  <table>
+    <tr>
+      <th>Job Id</th>
+      <th>Period</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Created By</th>
+      <th>Created At</th>
+    </tr>
+  {% for job in my_jobs_in_progress %}
+    <tr>
+      <td><a class="action" href="{{ url_for('jobs.view', id=job['id'])}}">{{ job['id'] }}</a></td>
+      <td>{{ job['accounting_period'] }}</td>
+      <td>{{ job['type'] }}</td>
+      <td>{{ job['name'] }}</td>
+      <td>{{ job['status'] }}</td>
+      <td>{{ job['username'] }}</td>
+      <td>{{ job['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+
+  <br>
+  <h3>Pending</h3>
+  <table>
+    <tr>
+      <th>Job Id</th>
+      <th>Period</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Created By</th>
+      <th>Created At</th>
+    </tr>
+  {% for job in my_jobs_pending %}
+    <tr>
+      <td><a class="action" href="{{ url_for('jobs.view', id=job['id'])}}">{{ job['id'] }}</a></td>
+      <td>{{ job['accounting_period'] }}</td>
+      <td>{{ job['type'] }}</td>
+      <td>{{ job['name'] }}</td>
+      <td>{{ job['status'] }}</td>
+      <td>{{ job['username'] }}</td>
+      <td>{{ job['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+
+  <br>
+  <h3>Completed</h3>
+  <table>
+    <tr>
+      <th>Job Id</th>
+      <th>Period</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Created By</th>
+      <th>Created At</th>
+    </tr>
+  {% for job in my_jobs_completed %}
+    <tr>
+      <td><a class="action" href="{{ url_for('jobs.view', id=job['id'])}}">{{ job['id'] }}</a></td>
+      <td>{{ job['accounting_period'] }}</td>
+      <td>{{ job['type'] }}</td>
+      <td>{{ job['name'] }}</td>
+      <td>{{ job['status'] }}</td>
+      <td>{{ job['username'] }}</td>
+      <td>{{ job['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+
+  <br>
+  <h3>Unknown</h3>
+  <table>
+    <tr>
+      <th>Job Id</th>
+      <th>Period</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Created By</th>
+      <th>Created At</th>
+    </tr>
+  {% for job in my_jobs_unknown %}
+    <tr>
+      <td><a class="action" href="{{ url_for('jobs.view', id=job['id'])}}">{{ job['id'] }}</a></td>
+      <td>{{ job['accounting_period'] }}</td>
+      <td>{{ job['type'] }}</td>
+      <td>{{ job['name'] }}</td>
+      <td>{{ job['status'] }}</td>
+      <td>{{ job['username'] }}</td>
+      <td>{{ job['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+{% endblock %}

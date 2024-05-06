@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS job_name;
 DROP TABLE IF EXISTS job_status;
 DROP TABLE IF EXISTS accounting_period;
 DROP TABLE IF EXISTS job_details;
+DROP TABLE IF EXISTS manual_adjustment;
 
 
 CREATE TABLE user (
@@ -58,7 +59,8 @@ CREATE TABLE job_status (
         ('In Progress'),
         ('Success'),
         ('Failure'),
-        ('Unknown');
+        ('Unknown'),
+        ('Cancelled');
 
 
 CREATE TABLE accounting_period (
@@ -100,9 +102,26 @@ CREATE TABLE job_details (
   period_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL,
   name_id INTEGER NOT NULL,
-  status_id INTEGER NOT NULL,
+  status_id INTEGER NOT NULL DEFAULT 1,
   FOREIGN KEY (period_id) REFERENCES accounting_period (id),
   FOREIGN KEY (user_id) REFERENCES user (id),
   FOREIGN KEY (name_id) REFERENCES job_name (id),
+  FOREIGN KEY (status_id) REFERENCES job_status (id)
+);
+
+CREATE TABLE manual_adjustment_upload (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  period_id INTEGER NOT NULL,
+  status_id INTEGER NOT NULL
+  upload_path TEXT NOT NULL,
+  attachment_path TEXT NOT NULL,
+  is_gross INTEGER NOT NULL CHECK (is_gross IN (0, 1)),
+  post_to_ledger INTEGER NOT NULL CHECK (post_to_ledger IN (0, 1)),
+  adj_type TEXT NOT NULL CHECK (adj_type IN ('REV', 'PERM', 'QTR')),
+  notify_email TEXT,
+  FOREIGN KEY (user_id) REFERENCES user (id),
+  FOREIGN KEY (period_id) REFERENCES accounting_period (id),
   FOREIGN KEY (status_id) REFERENCES job_status (id)
 );

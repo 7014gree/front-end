@@ -1,57 +1,14 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Current Jobs{% endblock %}</h1>
+  <h1>{% block title %}Homepage{% endblock %}</h1>
   {% if g.user %}
-    <a class="action" href="{{ url_for('blog.create') }}">New</a>
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  <br>
-  <table>
-    <tr>
-      <th>Job Id</th>
-      <th>Period</th>
-      <th>Type</th>
-      <th>Name</th>
-      <th>Status</th>
-      <th>Created By</th>
-      <th>Created At</th>
-    </tr>
-  {% for job in jobs %}
-    <tr>
-      <td>{{ job['id'] }}</td>
-      <td>{{ job['accounting_period'] }}</td>
-      <td>{{ job['type'] }}</td>
-      <td>{{ job['name'] }}</td>
-      <td>{{ job['status'] }}</td>
-      <td>{{ job['username'] }}</td>
-      <td>{{ job['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
-    </tr>
-  {% endfor %}
-  </table>
+<h2>Select one of the following:</h2>
+  <ul><a class="action" href="{{ url_for('jobs.index') }}">Monthly Close Tasks</a></ul>
+  <ul><a class="action" href="{{ url_for('reports.index') }}">Reports</a></ul>
+  <ul><a class="action" href="{{ url_for('adjustments.index') }}">Manual Adjustments</a></ul>
 {% endblock %}
-
-
-
-
-{# {% block content %}
-  {% for job in jobs %}
-    <article class="post">
-      <header>
-        <div>
-          <h1>{{ job['type'] }} - {{ job['name'] }}</h1>
-          <div class="about">by {{ job['username'] }} on {{ job['created'].strftime('%Y-%m-%d %H:%m:%S') }}</div>
-        </div>
-        {% if g.user['id'] == job['user_id'] %}
-          <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
-        {% endif %}
-      </header>
-      <p class="body">{{ job['type'] }}</p>
-    </article>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
-{% endblock %} #}

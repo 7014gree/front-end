@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Adjustments{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<h3>Generate Adjustments</h3>
+  <ul><a class="action" href="{{ url_for('wip') }}">Gross Adjustments</a></ul>
+  <ul><a class="action" href="{{ url_for('wip') }}">Ceded Adjustments</a></ul>
+
+<h3>Upload Adjustments</h3>
+  <ul><a class="action" href="{{ url_for('adjustments.upload')}}">Upload Invidiual Adjustment File</a></ul>
+  <ul><a class="action" href="{{ url_for('wip') }}">Upload Folder Containing Adjustment Files</a></ul>
+
+
+<h3>Upload Queue</h3> 
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Period</th>
+    <th>Filepath</th>
+    <th>Attachment</th>
+    <th>Status</th>
+    <th>Created By</th>
+    <th>Created At</th>
+    <th>Actions</th>
+  </tr>
+{% for adj in adj_details %}
+  <tr>
+    <td><a class="action" href="{{ url_for('adjustments.view', id=adj['id'])}}">{{ adj['id'] }}</a></td>
+    <td>{{ adj['accounting_period'] }}</td>
+    <td>
+      {% if adj['is_gross'] == 1%}
+      Gross
+      {% else %}
+      Ceded
+      {% endif %}
+       - 
+      {% if adj['adj_type'] == 'PERM' %}
+      Permanent
+      {% else %}
+        {% if adj['adj_type'] == 'QTR' %}
+        Quarterly 
+        {% endif %}
+      Reversing
+      {% endif %}
+       - 
+      {% if adj['post_to_ledger'] == 0%}
+      Not 
+      {% endif %}
+      Posted to Ledger
+    </td>
+    <td>{{ adj['upload_path'] }}</td>
+    <td>{{ adj['status'] }}</td>
+    <td>{{ adj['username'] }}</td>
+    <td>{{ adj['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+    <td>
+      {% if adj['status'] == 'Pending' and g.user['id'] == adj['user_id'] %}
+      <form action="{{ url_for('adjustments.cancel', id=adj['id']) }}" method="post">
+        <input type="hidden" name="_method" value="Cancel">
+        <button type="submit" class="action">Cancel</button>
+      </form>
+      {% endif %}
+      {% if adj['status'] in ['Success', 'Failure'] %}
+        <!-- <form action="{{ url_for('adjustments.repeat', id=adj['id']) }}" method="post">
+          <input type="hidden" name="_method" value="Repeat">
+          <button type="submit" class="action">Repeat</button>
+        </form> -->
+      {% endif %}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}

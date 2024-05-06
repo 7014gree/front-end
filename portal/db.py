@@ -39,3 +39,21 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
+def get_open_periods():
+    db = get_db()
+    open_periods = db.execute(
+        'SELECT id, accounting_period'
+        ' FROM accounting_period'
+        ' WHERE is_open = 1'
+    ).fetchall()
+    return open_periods
+
+def get_period_id_from_period(period: str) -> int | None:
+    db = get_db()
+    period_id = db.execute(
+                'SELECT id FROM accounting_period'
+                ' WHERE accounting_period = ?',
+                (period,)
+            ).fetchone()[0]
+    return period_id

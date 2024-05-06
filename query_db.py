@@ -25,4 +25,4 @@ if __name__ == "__main__":
 
     insert_values = 'insert_values.sql'
     select = 'select_query.sql'
-    run_query(select)
+    run_query(insert_values)

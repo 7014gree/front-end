@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Job Details - id: {{ job['id'] }}{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <br>
+  <table>
+    <tr>
+      <th>Job Id</th>
+      <th>Period</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Created By</th>
+      <th>Created At</th>
+    </tr>
+    <tr>
+      <td>{{ job['id'] }}</td>
+      <td>{{ job['accounting_period'] }}</td>
+      <td>{{ job['type'] }}</td>
+      <td>{{ job['name'] }}</td>
+      <td>{{ job['status'] }}</td>
+      <td>{{ job['username'] }}</td>
+      <td>{{ job['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+    </tr>
+  </table>
+  {% if job['status'] == 'Pending' and g.user['id'] == job['user_id'] %}
+    <form action="{{ url_for('jobs.cancel', id=job['id']) }}" method="post">
+      <input type="submit" class="button" value="Cancel">
+    </form>
+  {% endif %}
+  {% if job['status'] in ['Success', 'Failure', 'Cancelled'] and g.user %}
+    <form action="{{ url_for('jobs.repeat', id=job['id']) }}" method="post">
+      <input type="submit" class="button" value="Repeat">
+    </form>
+  {% endif %}
+{% endblock %}

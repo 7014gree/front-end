@@ -6,10 +6,10 @@ from werkzeug.exceptions import abort
 from portal.auth import login_required
 from portal.db import get_db
 
-bp = Blueprint('home', __name__)
+bp = Blueprint('reports', __name__)
 
 
-@bp.route("/")
+@bp.route("/reports")
 def index():
-    return render_template('home/index.html')
+    return render_template('reports/index.html')
 

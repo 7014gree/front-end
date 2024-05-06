@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Monthly Close Tasks{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  {% if g.user %}
+    <h3>Select a Task Type:</h3>
+      <dl>
+        <dt><a class="action" href="{{ url_for('jobs.new', type='General') }}">General</a></dt>
+          <dd>- Change Accounting Period</dd>
+          <dd>- Data Quality</dd>
+          <dd>- RAPPORT Earning Patterns</dd><br>
+        <dt><a class="action" href="{{ url_for('jobs.new', type='Gross Close') }}">Gross Close</a></dt>
+          <dd>- Postbox</dd>
+          <dd>- Reconciliations</dd>
+          <dd>- Reports</dd><br>
+        <dt><a class="action" href="{{ url_for('jobs.new', type='Gross Post-Close') }}">Gross Post-Close</a></dt>
+          <dd>- Postbox</dd>
+          <dd>- Reconciliations</dd>
+          <dd>- Reports</dd>
+          <dd>- Adjutsments</dd><br>
+        <dt><a class="action" href="{{ url_for('jobs.new', type='Ceded Close') }}">Ceded Close</a></dt>
+          <dd>- Postbox</dd>
+          <dd>- Reconciliations</dd>
+          <dd>- Reports</dd><br>
+        <dt><a class="action" href="{{ url_for('jobs.new', type='Ceded Post-Close') }}">Ceded Post-Close</a></dt>
+          <dd>- Postbox</dd>
+          <dd>- Reconciliations</dd>
+          <dd>- Reports</dd>
+          <dd>- Adjutsments</dd><br>
+      </dl>
+  {% endif %}
+
+  <h3>{% if all %}All{% else %}Current{% endif %} Tasks:</h3>
+  {% if all %}
+  <a class="action" href="{{ url_for('jobs.index') }}">Click for Current Tasks</a>
+  {% else %}
+  <a class="action" href="{{ url_for('jobs.all_jobs') }}">Click for All Tasks</a>
+  {% endif %}
+  <table>
+    <tr>
+      <th>Job Id</th>
+      <th>Period</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Created By</th>
+      <th>Created At</th>
+      <th>Actions</th>
+    </tr>
+  {% for job in jobs %}
+    <tr>
+      <td><a class="action" href="{{ url_for('jobs.view', id=job['id'])}}">{{ job['id'] }}</a></td>
+      <td>{{ job['accounting_period'] }}</td>
+      <td>{{ job['type'] }}</td>
+      <td>{{ job['name'] }}</td>
+      <td>{{ job['status'] }}</td>
+      <td>{{ job['username'] }}</td>
+      <td>{{ job['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+      <td>
+        {% if job['status'] == 'Pending' and g.user['id'] == job['user_id'] %}
+        <form action="{{ url_for('jobs.cancel', id=job['id']) }}" method="post">
+          <input type="hidden" name="_method" value="Cancel">
+          <button type="submit" class="action">Cancel</button>
+        </form>
+        {% endif %}
+        {% if job['status'] in ['Success', 'Failure', 'Cancelled'] %}
+          <form action="{{ url_for('jobs.repeat', id=job['id']) }}" method="post">
+            <input type="hidden" name="_method" value="Repeat">
+            <button type="submit" class="action">Repeat</button>
+          </form>
+        {% endif %}</td>
+    </tr>
+  {% endfor %}
+  </table>
+{% endblock %}

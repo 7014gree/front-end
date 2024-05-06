@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Adjustment Upload - id: {{ adj_details['id'] }}{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <br>
+  <table>
+    <tr>
+      <th>Id</th>
+      <th>Period</th>
+      <th>Type</th>
+      <th>Filepath</th>
+      <th>Status</th>
+      <th>Created By</th>
+      <th>Created At</th>
+    </tr>
+    <tr>
+      <td>{{ adj_details['id'] }}</td>
+      <td>{{ adj_details['accounting_period'] }}</td>
+      <td>
+        {% if adj_details['is_gross'] == 1%}
+        Gross 
+        {% else %}
+        Ceded
+        {% endif %}
+         - 
+        {% if adj_details['adj_type'] == 'PERM' %}
+        Permanent
+        {% else %}
+          {% if adj_details['adj_type'] == 'QTR' %}
+          Quarterly 
+          {% endif %}
+        Reversing
+        {% endif %}
+         - 
+        {% if adj_details['post_to_ledger'] == 0%}
+        Not 
+        {% endif %}
+        Posted to Ledger
+      </td>
+      <td>{{ adj_details['upload_path'] }}</td>
+      <td>{{ adj_details['status'] }}</td>
+      <td>{{ adj_details['username'] }}</td>
+      <td>{{ adj_details['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+    </tr>
+  </table>
+  {% if adj_details['status'] == 'Pending' and g.user['id'] == adj_details['user_id'] %}
+    <form action="{{ url_for('adjustments.cancel', id=adj_details['id']) }}" method="post">
+      <input type="submit" class="button" value="Cancel">
+    </form>
+  {% endif %}
+  {% if adj_details['status'] in ['Success', 'Failure', 'Cancelled'] and g.user %}
+    <!-- <form action="{{ url_for('adjustments.repeat', id=adj_details['id']) }}" method="post">
+      <input type="submit" class="button" value="Repeat">
+    </form> -->
+  {% endif %}
+{% endblock %}

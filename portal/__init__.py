@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, render_template, flash, session
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -25,6 +25,9 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
     
+    @app.route('/wip')
+    def wip():
+        return render_template('wip.html')
 
     from . import db
     db.init_app(app)
@@ -34,9 +37,19 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
 
+    from . import jobs
+    app.register_blueprint(jobs.bp)
+    # app.add_url_rule('/', endpoint='index')
+
     from . import home
     app.register_blueprint(home.bp)
     app.add_url_rule('/', endpoint='index')
+
+    from . import reports
+    app.register_blueprint(reports.bp)
+
+    from . import adjustments
+    app.register_blueprint(adjustments.bp)
     
     return app
 
