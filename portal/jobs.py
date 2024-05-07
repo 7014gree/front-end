@@ -4,7 +4,7 @@ from flask import (
 from werkzeug.exceptions import abort
 
 from portal.auth import login_required
-from portal.db import get_db, get_open_periods, get_period_id_from_period
+from portal.db import get_db, get_open_periods, get_period_id_from_period, change_job_status
 
 bp = Blueprint('jobs', __name__)
 
@@ -185,14 +185,7 @@ def delete(id):
 @login_required
 def cancel(id):
     get_job(id)
-    db = get_db()
-    db.execute(
-        'UPDATE job_details'
-        ' SET status_id = 6'
-        ' WHERE id = ?',
-        (id,)
-    )
-    db.commit()
+    change_job_status(job_id=id, status_id=6)
     flash(f"Task cancelled (ID={id}).")
     return redirect(url_for('jobs.index'))
 

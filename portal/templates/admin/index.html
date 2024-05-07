@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Admin Panel{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if g.user['id'] == 1 %}
+  <form method="post">
+    <fieldset>
+      <legend><h3>Enter a SQL query below</h3></legend>
+        <textarea id="text-input" rows="4" name="sql-query"></textarea><br>
+      </div>
+    </fieldset>
+    
+    <h1></h1>
+    <input type="submit" value="Submit">
+  </form>
+  {% else %}
+  <br>
+  No Access
+  {% endif %} 
+{% endblock %}

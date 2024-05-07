@@ -50,6 +50,12 @@ def create_app(test_config=None):
 
     from . import adjustments
     app.register_blueprint(adjustments.bp)
+
+    from . import settings
+    app.register_blueprint(settings.bp)
+
+    from . import admin
+    app.register_blueprint(admin.bp)
     
     return app
 

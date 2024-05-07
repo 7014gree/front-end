@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Change Accounting Periods{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if g.user %}
+  {% endif %}
+
+  <h3>All Periods</h3>
+  <table>
+    <tr>
+      <th>Period</th>
+      <th>Is Open</th>
+      <th>Is Current</th>
+      <th>Open Period</th>
+      <th>Close Period</th>
+      <th>Make Current</th>
+    </tr>
+  {% for period in all_periods %}
+    <tr>
+      <td>{{ period['accounting_period'] }}</td>
+      <td>
+        {% if period['is_open'] == 1 %}
+        Open
+        {% else %}
+        Closed
+        {% endif %}
+      </td>
+      <td>
+        {% if period['is_current'] %}
+        Current Period
+        {% endif %}
+      </td>
+      <!-- <td>placeholder</td>
+      <td>placeholder</td>
+      <td>placeholder</td> -->
+      <td>
+        {% if period['is_open'] == 0 and g.user %}
+        <form action="{{ url_for('settings.open_period', id=period['id']) }}" method="post">
+          <input type="hidden" name="_method" value="Cancel">
+          <button type="submit" class="action">Open</button>
+        </form>
+        {% endif %}
+      </td>
+      <td>
+        {% if period['is_open'] == 1 and g.user %}
+          <form action="{{ url_for('settings.close_period', id=period['id']) }}" method="post">
+            <input type="hidden" name="_method" value="Cancel">
+            <button type="submit" class="action">Close</button>
+          </form>
+        {% endif %}
+      </td>
+      <td>
+        {% if period['is_current'] == 0 and g.user and period['id'] > current_period %}
+          <form action="{{ url_for('settings.set_current_period', id=period['id']) }}" method="post">
+            <input type="hidden" name="_method" value="Cancel">
+            <button type="submit" class="action">Make Current</button>
+          </form>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </table>
+{% endblock %}

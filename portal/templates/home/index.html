@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block header %}
   <h1>{% block title %}Homepage{% endblock %}</h1>
   {% if g.user %}
@@ -7,8 +6,25 @@
 {% endblock %}
 
 {% block content %}
-<h2>Select one of the following:</h2>
-  <ul><a class="action" href="{{ url_for('jobs.index') }}">Monthly Close Tasks</a></ul>
-  <ul><a class="action" href="{{ url_for('reports.index') }}">Reports</a></ul>
-  <ul><a class="action" href="{{ url_for('adjustments.index') }}">Manual Adjustments</a></ul>
+  <h2>Actions</h2>
+  <h3>
+    - <a class="action" href="{{ url_for('jobs.index') }}">Monthly Close Tasks</a>
+  </h3>
+  <h3>
+    - <a class="action" href="{{ url_for('reports.index') }}">Reports</a>
+  </h3>
+  <h3>
+    - <a class="action" href="{{ url_for('adjustments.index') }}">Manual Adjustments</a>
+  </h3>
+
+  
+  <h2>Other</h2>
+  <h3>
+    - <a class="action" href="{{ url_for('settings.index') }}">Settings</a>
+  </h3>
+  {% if g.user['id'] == 1 %} 
+    <h3>
+      - <a class="action" href="{{ url_for('admin.index') }}">Admin Panel</a>
+    </h3>
+  {% endif %}
 {% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New {{ category }} Data Report{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<form method="post">
+  <label for="name">Report Name</label><br>
+    <select id="name" name="name">
+      <option value=""></option>
+      {% for task in job_names %}
+      <option value="{{ task['name'] }}">{{ task['name'] }}</option>
+      {% endfor %}
+    </select>
+
+  <label for="period">Accounting Period</label>
+    <select id="period" name="period" required>
+      <option value=""></option>
+      {% for period in valid_periods %}
+      <option value="{{ period['accounting_period'] }}">{{ period['accounting_period'] }}</option>
+      {% endfor %}
+    </select>
+
+
+  <label for="entity">Legal Entity</label><br>
+    <select id="entity" name="entity" required>
+      <option value=""></option>
+      <option value="1947">Syndicate 1947</option>
+      <option value="4000">Syndicate 4000 (excluding S3334)</option>
+      <option value="4000+">Syndicate 4000 (including S3334)</option>
+      <option value="3334">Syndicate 3334</option>
+      <option value="3334">All Entities</option>
+    </select>
+
+  <label for="mode">YTD or ITD:</label><br>
+  <select id="mode" name="mode" required>
+    <option value=""></option>
+    <option value="YTD">YTD</option>
+    <option value="ITD">ITD</option>
+  </select>
+  <p></p>
+  <input type="submit" value="Submit">
+</form>
+{% endblock %}

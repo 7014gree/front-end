@@ -57,3 +57,31 @@ def get_period_id_from_period(period: str) -> int | None:
                 (period,)
             ).fetchone()[0]
     return period_id
+
+def get_current_period():
+    db = get_db()
+    current_period = db.execute(
+        'SELECT id FROM accounting_period'
+        ' WHERE is_current = 1'
+    ).fetchone()[0]
+    return current_period
+
+def get_period_from_id(id):
+    db = get_db()
+    period_str = db.execute(
+        'SELECT accounting_period'
+        ' FROM accounting_period'
+        ' WHERE id = ?',
+        (id,)
+    ).fetchone()[0]
+    return period_str
+
+def change_job_status(job_id, status_id):
+    db = get_db()
+    db.execute(
+        'UPDATE job_details'
+        ' SET status_id = ?'
+        ' WHERE id = ?',
+        (status_id, job_id,)
+    )
+    db.commit()

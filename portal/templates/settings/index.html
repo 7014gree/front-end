@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Settings{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<h3>Portal Settings</h3>
+  <ul><a class="action" href="{{ url_for('settings.periods') }}">Change Accounting Periods</a></ul>
+  <ul><a class="action" href="{{ url_for('wip') }}">Add New Task</a></ul>
+
+<h3>User Settings</h3>
+  <ul><a class="action" href="{{ url_for('wip') }}">Change Password</a></ul>
+  <ul><a class="action" href="{{ url_for('wip') }}">Change Email Address</a></ul>
+
+{% endblock %}

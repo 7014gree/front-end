@@ -7,36 +7,69 @@
 {% endblock %}
 
 {% block content %}
-<form method="post">
-  <label for="name">Report Name</label><br>
-    <select id="name" name="name">
-      {% for task in job_names %}
-      <option value="{{ task['name'] }}">{{ task['name'] }}</option>
-      {% endfor %}
-    </select>
+  {% if g.user %}
+    <h3>Select a Report Type</h3>
+      <ul><a class="action" href="{{ url_for('reports.new', category='Gross') }}">Gross Data</a></ul>
+      <ul><a class="action" href="{{ url_for('reports.new', category='Ceded') }}">Ceded Data</a></ul>
+      <ul><a class="action" href="{{ url_for('reports.new', category='Audit') }}">Audit Data</a></ul>
+  {% endif %}
 
-  <label for="period">Accounting Period</label>
-    <select id="period" name="period">
-      {% for valid_period in all_periods %}
-      <option value="{{ valid_period['accounting_period'] }}">{{ valid_period['accounting_period'] }}</option>
-      {% endfor %}
-    </select>
-
-
-  <label for="entity">Legal Entity</label><br>
-    <select id="entity" name="entity">
-      <option value="1947">Syndicate 1947</option>
-      <option value="4000">Syndicate 4000 (excluding S3334)</option>
-      <option value="4000+">Syndicate 4000 (including S3334)</option>
-      <option value="3334">Syndicate 3334</option>
-      <option value="3334">All Entities</option>
-    </select>
-
-  <label for="mode">YTD or ITD:</label><br>
-  <select id="mode" name="mode">
-    <option value="YTD">YTD</option>
-    <option value="ITD">ITD</option>
-  </select>
-  <input type="submit" value="Submit">
-</form>
+  <h3>Report Queue</h3> 
+  <table>
+    <tr>
+      <th>Id</th>
+      <th>Period</th>
+      <th>Report Name</th>
+      <th>Status</th>
+      <th>Requested By</th>
+      <th>Requested At</th>
+      <th>Actions</th>
+    </tr>
+  {% if False %}
+  {% for adj in adj_details %}
+    <tr>
+      <td><a class="action" href="{{ url_for('adjustments.view', id=adj['id'])}}">{{ adj['id'] }}</a></td>
+      <td>{{ adj['accounting_period'] }}</td>
+      <td>
+        {% if adj['is_gross'] == 1%}
+        Gross
+        {% else %}
+        Ceded
+        {% endif %}
+        - 
+        {% if adj['adj_type'] == 'PERM' %}
+        Permanent
+        {% else %}
+          {% if adj['adj_type'] == 'QTR' %}
+          Quarterly 
+          {% endif %}
+        Reversing
+        {% endif %}
+        - 
+        {% if adj['post_to_ledger'] == 0%}
+        Not 
+        {% endif %}
+        Posted to Ledger
+      </td>
+      <td>{{ adj['upload_path'] }}</td>
+      <td>{{ adj['status'] }}</td>
+      <td>{{ adj['username'] }}</td>
+      <td>{{ adj['created'].strftime('%Y-%m-%d %H:%m:%S') }}</td>
+      <td>
+        {% if adj['status'] == 'Pending' and g.user['id'] == adj['user_id'] %}
+        <form action="{{ url_for('adjustments.cancel', id=adj['id']) }}" method="post">
+          <input type="hidden" name="_method" value="Cancel">
+          <button type="submit" class="action">Cancel</button>
+        </form>
+        {% endif %}
+        {% if adj['status'] in ['Success', 'Failure'] %}
+          <!-- <form action="{{ url_for('adjustments.repeat', id=adj['id']) }}" method="post">
+            <input type="hidden" name="_method" value="Repeat">
+            <button type="submit" class="action">Repeat</button>
+          </form> -->
+        {% endif %}</td>
+    </tr>
+  {% endfor %}
+  {% endif %}
+  </table>
 {% endblock %}

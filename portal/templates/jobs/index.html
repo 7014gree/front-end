@@ -34,7 +34,7 @@
   {% endif %}
 
   <h3>{% if all %}All{% else %}Current{% endif %} Tasks:</h3>
-  {% if all %}
+  {% if all == True %}
   <a class="action" href="{{ url_for('jobs.index') }}">Click for Current Tasks</a>
   {% else %}
   <a class="action" href="{{ url_for('jobs.all_jobs') }}">Click for All Tasks</a>

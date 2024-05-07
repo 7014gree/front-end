@@ -4,13 +4,14 @@ DROP TABLE IF EXISTS job_name;
 DROP TABLE IF EXISTS job_status;
 DROP TABLE IF EXISTS accounting_period;
 DROP TABLE IF EXISTS job_details;
-DROP TABLE IF EXISTS manual_adjustment;
+DROP TABLE IF EXISTS manual_adjustment_upload;
 
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  email TEXT NOT NULL
 );
 
     -- INSERT INTO user (username, password)
